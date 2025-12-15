@@ -1,0 +1,20 @@
+[
+  {
+    "gender": "Male",
+    "age_group": "25-29",
+    "population": 100000,
+    "never_married": 60000,
+    "bachelor_or_above": 18000,
+    "employed": 45000,
+    "urban": 40000
+  },
+  {
+    "gender": "Female",
+    "age_group": "25-29",
+    "population": 95000,
+    "never_married": 55000,
+    "bachelor_or_above": 12000,
+    "employed": 30000,
+    "urban": 35000
+  }
+]
