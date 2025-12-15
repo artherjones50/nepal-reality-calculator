@@ -84,6 +84,9 @@
       font-weight: bold;
     }
 
+    .error {
+      color: #d32f2f;
+    }
   </style>
 </head>
 <body>
@@ -126,6 +129,9 @@
     <div id="result"></div>
   </div>
 
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
   <script>
     async function calculate() {
       const gender = document.getElementById("gender").value;
@@ -133,44 +139,62 @@
       const marital = document.getElementById("marital").value;
       const employment = document.getElementById("employment").value;
 
-      const response = await fetch("data.json");
-      const data = await response.json();
-
-      const group = data.find(
-        item => item.gender === gender && item.age_group === age
-      );
-
       const resultEl = document.getElementById("result");
       resultEl.classList.remove("show");
 
-      if (!group) {
-        resultEl.innerText = "Data not available.";
+      try {
+        const response = await fetch("data.json");
+        if (!response.ok) throw new Error("Could not fetch data.json");
+        const data = await response.json();
+
+        // Debug logs
+        console.log("Selected:", { gender, age, marital, employment });
+
+        const group = data.find(
+          item => item.gender === gender && item.age_group === age
+        );
+
+        if (!group) {
+          resultEl.innerHTML = "<span class='error'>Data not available for this age/gender combination.</span>";
+          setTimeout(() => resultEl.classList.add("show"), 50);
+          return;
+        }
+
+        const match = group.bachelor[marital]?.[employment];
+
+        if (!match || match === 0) {
+          resultEl.innerHTML = "<span class='error'>Data not available for this combination.</span>";
+          setTimeout(() => resultEl.classList.add("show"), 50);
+          return;
+        }
+
+        const base = group.population;
+        const percentage = ((match / base) * 100).toFixed(1);
+        const oneIn = Math.round(base / match);
+
+        let emoji = percentage > 50 ? "🎉" : percentage > 20 ? "🙂" : "😅";
+
+        resultEl.innerHTML = `${emoji} <span class="highlight">${percentage}%</span> of ${gender.toLowerCase()}s aged ${age} who are ${marital.replace('_',' ')} and ${employment} 
+          have a bachelor’s degree or higher (${match} people out of ${base}). That’s about 1 in ${oneIn} people.`;
+
         setTimeout(() => resultEl.classList.add("show"), 50);
-        return;
-      }
 
-      const match = group.bachelor[marital][employment];
+        // Confetti for >50%
+        if (percentage > 50) {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
 
-      if (!match || match === 0) {
-        resultEl.innerText = "Data not available for this combination.";
+      } catch (err) {
+        console.error(err);
+        resultEl.innerHTML = "<span class='error'>Error fetching data. Make sure data.json is in the same folder.</span>";
         setTimeout(() => resultEl.classList.add("show"), 50);
-        return;
       }
-
-      const base = group.population;
-      const percentage = ((match / base) * 100).toFixed(1);
-      const oneIn = Math.round(base / match);
-
-      // Emoji based on percentage
-      let emoji = percentage > 50 ? "🎉" : percentage > 20 ? "🙂" : "😅";
-
-      resultEl.innerHTML = `${emoji} <span class="highlight">${percentage}%</span> of ${gender.toLowerCase()}s aged ${age} who are ${marital.replace('_',' ')} and ${employment} 
-        have a bachelor’s degree or higher (${match} people out of ${base}). That’s about 1 in ${oneIn} people.`;
-
-      setTimeout(() => resultEl.classList.add("show"), 50);
     }
   </script>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
 </body>
 </html>
