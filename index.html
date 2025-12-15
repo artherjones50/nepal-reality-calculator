@@ -133,68 +133,74 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
   <!-- Embedded JSON Data -->
-  <script>
-    const data = [
-      {
-        "gender": "Male",
-        "age_group": "20-24",
-        "population": 1000,
-        "bachelor": {
-          "never_married": {
-            "employed": 200,
-            "unemployed": 50
-          },
-          "married": {
-            "employed": 150,
-            "unemployed": 30
-          },
-          "divorced_widowed": {
-            "employed": 20,
-            "unemployed": 10
-          }
-        }
-      },
-      {
-        "gender": "Male",
-        "age_group": "25-29",
-        "population": 1200,
-        "bachelor": {
-          "never_married": {
-            "employed": 250,
-            "unemployed": 40
-          },
-          "married": {
-            "employed": 200,
-            "unemployed": 50
-          },
-          "divorced_widowed": {
-            "employed": 30,
-            "unemployed": 10
-          }
-        }
-      },
-      {
-        "gender": "Female",
-        "age_group": "20-24",
-        "population": 950,
-        "bachelor": {
-          "never_married": {
-            "employed": 180,
-            "unemployed": 60
-          },
-          "married": {
-            "employed": 100,
-            "unemployed": 30
-          },
-          "divorced_widowed": {
-            "employed": 15,
-            "unemployed": 5
-          }
-        }
-      }
-      // Add all other combinations as needed
-    ];
-  </script>
+ <script>
+const data = [
+  // Male
+  {
+    "gender": "Male",
+    "age_group": "20-24",
+    "population": 1000,
+    "bachelor": {
+      "never_married": { "employed": 200, "unemployed": 50 },
+      "married": { "employed": 150, "unemployed": 30 },
+      "divorced_widowed": { "employed": 20, "unemployed": 10 }
+    }
+  },
+  {
+    "gender": "Male",
+    "age_group": "25-29",
+    "population": 1200,
+    "bachelor": {
+      "never_married": { "employed": 250, "unemployed": 40 },
+      "married": { "employed": 200, "unemployed": 50 },
+      "divorced_widowed": { "employed": 30, "unemployed": 10 }
+    }
+  },
+  {
+    "gender": "Male",
+    "age_group": "30-34",
+    "population": 1100,
+    "bachelor": {
+      "never_married": { "employed": 220, "unemployed": 40 },
+      "married": { "employed": 180, "unemployed": 30 },
+      "divorced_widowed": { "employed": 25, "unemployed": 10 }
+    }
+  },
+
+  // Female
+  {
+    "gender": "Female",
+    "age_group": "20-24",
+    "population": 950,
+    "bachelor": {
+      "never_married": { "employed": 180, "unemployed": 60 },
+      "married": { "employed": 100, "unemployed": 30 },
+      "divorced_widowed": { "employed": 15, "unemployed": 5 }
+    }
+  },
+  {
+    "gender": "Female",
+    "age_group": "25-29",
+    "population": 1000,
+    "bachelor": {
+      "never_married": { "employed": 200, "unemployed": 50 },
+      "married": { "employed": 160, "unemployed": 40 },
+      "divorced_widowed": { "employed": 20, "unemployed": 10 }
+    }
+  },
+  {
+    "gender": "Female",
+    "age_group": "30-34",
+    "population": 900,
+    "bachelor": {
+      "never_married": { "employed": 180, "unemployed": 40 },
+      "married": { "employed": 140, "unemployed": 30 },
+      "divorced_widowed": { "employed": 20, "unemployed": 10 }
+    }
+  }
+];
+</script>
+
 <script>
 function calculate() {
   const gender = document.getElementById("gender").value;
