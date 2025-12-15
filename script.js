@@ -7,6 +7,7 @@ async function calculate() {
   const response = await fetch("data.json");
   const data = await response.json();
 
+  // find the exact group based on gender + age
   const group = data.find(
     item => item.gender === gender && item.age_group === age
   );
@@ -16,12 +17,17 @@ async function calculate() {
     return;
   }
 
-  // pick the exact intersection based on marital + employment
-  let key = `${marital}_${employment}_bachelor`; // e.g., never_married_employed_bachelor
-  let match = group[key];
+  // exact key for marital + employment
+  const key = `${marital}_${employment}_bachelor`;
+  const match = group[key];
+
+  if (!match || match === 0) {
+    document.getElementById("result").innerText = "Data not available for this combination.";
+    return;
+  }
 
   const base = group.population;
-  const percentage = (match / base * 100).toFixed(1);
+  const percentage = ((match / base) * 100).toFixed(1);
   const oneIn = Math.round(base / match);
 
   document.getElementById("result").innerText =
