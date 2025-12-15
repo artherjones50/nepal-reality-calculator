@@ -16,7 +16,7 @@ async function calculate() {
     return;
   }
 
-  // pick the exact intersection
+  // pick the exact intersection based on marital + employment
   let key = `${marital}_${employment}_bachelor`; // e.g., never_married_employed_bachelor
   let match = group[key];
 
