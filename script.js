@@ -16,16 +16,9 @@ async function calculate() {
     return;
   }
 
-  let match;
-
-  // First, consider marital status
-  if (marital === "never_married") match = group.never_married_bachelor;
-  else if (marital === "married") match = group.married_bachelor;
-  else if (marital === "divorced_widowed") match = group.divorced_widowed_bachelor;
-
-  // Then filter by employment
-  if (employment === "employed") match = Math.min(match, group.employed_bachelor);
-  else if (employment === "unemployed") match = Math.min(match, group.unemployed_bachelor);
+  // pick the exact intersection
+  let key = `${marital}_${employment}_bachelor`; // e.g., never_married_employed_bachelor
+  let match = group[key];
 
   const base = group.population;
   const percentage = (match / base * 100).toFixed(1);
