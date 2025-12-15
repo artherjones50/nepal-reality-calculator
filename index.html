@@ -6,18 +6,34 @@
   <style>
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #e8f0fe;
+      background: linear-gradient(135deg, #e0f7fa, #ffe0b2);
       color: #333;
       text-align: center;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .card {
       max-width: 400px;
-      margin: 40px auto;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      background-color: #f9f9f9;
+      width: 90%;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      background-color: #ffffff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #00796b;
     }
 
     label {
@@ -27,45 +43,53 @@
     select, button {
       padding: 10px;
       margin: 8px 0;
-      border-radius: 6px;
+      border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 16px;
       width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    select:hover {
+      border-color: #00796b;
     }
 
     button {
-      background-color: #4CAF50;
+      background-color: #00796b;
       color: white;
       border: none;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #004d40;
     }
 
     #result {
-      margin-top: 20px;
+      margin-top: 25px;
       font-weight: bold;
       font-size: 18px;
       opacity: 0;
+      transform: scale(0.95);
       transition: all 0.5s ease;
     }
 
     #result.show {
       opacity: 1;
+      transform: scale(1);
     }
 
-    option {
-      font-size: 16px;
+    .highlight {
+      color: #e91e63;
+      font-weight: bold;
     }
+
   </style>
 </head>
 <body>
 
   <div class="card">
-    <h2>Nepal Reality Calculator 🇳🇵</h2>
+    <h2>🇳🇵 Nepal Reality Calculator</h2>
 
     <label>👤 Gender:</label>
     <select id="gender">
@@ -116,9 +140,10 @@
         item => item.gender === gender && item.age_group === age
       );
 
+      const resultEl = document.getElementById("result");
+      resultEl.classList.remove("show");
+
       if (!group) {
-        const resultEl = document.getElementById("result");
-        resultEl.classList.remove("show");
         resultEl.innerText = "Data not available.";
         setTimeout(() => resultEl.classList.add("show"), 50);
         return;
@@ -127,8 +152,6 @@
       const match = group.bachelor[marital][employment];
 
       if (!match || match === 0) {
-        const resultEl = document.getElementById("result");
-        resultEl.classList.remove("show");
         resultEl.innerText = "Data not available for this combination.";
         setTimeout(() => resultEl.classList.add("show"), 50);
         return;
@@ -138,13 +161,16 @@
       const percentage = ((match / base) * 100).toFixed(1);
       const oneIn = Math.round(base / match);
 
-      const resultEl = document.getElementById("result");
-      resultEl.classList.remove("show");
-      resultEl.innerHTML = `${percentage}% of ${gender.toLowerCase()}s aged ${age} who are ${marital.replace('_',' ')} and ${employment} 
+      // Emoji based on percentage
+      let emoji = percentage > 50 ? "🎉" : percentage > 20 ? "🙂" : "😅";
+
+      resultEl.innerHTML = `${emoji} <span class="highlight">${percentage}%</span> of ${gender.toLowerCase()}s aged ${age} who are ${marital.replace('_',' ')} and ${employment} 
         have a bachelor’s degree or higher (${match} people out of ${base}). That’s about 1 in ${oneIn} people.`;
+
       setTimeout(() => resultEl.classList.add("show"), 50);
     }
   </script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
 </body>
 </html>
