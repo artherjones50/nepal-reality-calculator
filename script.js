@@ -7,24 +7,24 @@ async function calculate() {
   const response = await fetch("data.json");
   const data = await response.json();
 
-  // find the exact group based on gender + age
   const group = data.find(
     item => item.gender === gender && item.age_group === age
   );
 
+  const resultEl = document.getElementById("result");
+  resultEl.classList.remove("show");
+
   if (!group) {
-    document.getElementById("result").innerText = "Data not available.";
+    resultEl.innerText = "Data not available.";
+    setTimeout(() => resultEl.classList.add("show"), 50);
     return;
   }
 
-  // exact key for marital + employment
-  const key = `${marital}_${employment}_bachelor`;
-  console.log("Looking for key:", key);
-console.log("Group keys:", Object.keys(group));
-  const match = group[key];
+  const match = group.bachelor[marital][employment];
 
   if (!match || match === 0) {
-    document.getElementById("result").innerText = "Data not available for this combination.";
+    resultEl.innerText = "Data not available for this combination.";
+    setTimeout(() => resultEl.classList.add("show"), 50);
     return;
   }
 
@@ -32,7 +32,20 @@ console.log("Group keys:", Object.keys(group));
   const percentage = ((match / base) * 100).toFixed(1);
   const oneIn = Math.round(base / match);
 
-  document.getElementById("result").innerText =
-    `${percentage}% of ${gender.toLowerCase()}s aged ${age} who are ${marital.replace('_',' ')} and ${employment} 
-     have a bachelor’s degree or higher. That’s about 1 in ${oneIn} people.`;
+  // Emoji based on percentage
+  let emoji = percentage > 50 ? "🎉" : percentage > 20 ? "🙂" : "😅";
+
+  resultEl.innerHTML = `${emoji} <span class="highlight">${percentage}%</span> of ${gender.toLowerCase()}s aged ${age} who are ${marital.replace('_',' ')} and ${employment} 
+    have a bachelor’s degree or higher (${match} people out of ${base}). That’s about 1 in ${oneIn} people.`;
+
+  setTimeout(() => resultEl.classList.add("show"), 50);
+
+  // Trigger confetti if percentage > 50
+  if (percentage > 50) {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
 }
