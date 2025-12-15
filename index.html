@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Nepal Reality Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<h2>How Common Are Your Preferences in Nepal?</h2>
+<p>This tool uses national statistics to estimate population percentages.</p>
+
+<label>Looking for:</label>
+<select id="gender">
+  <option value="Male">Man</option>
+  <option value="Female">Woman</option>
+</select>
+
+<br><br>
+
+<label>Age range:</label>
+<select id="age">
+  <option value="25-29">25–29</option>
+  <option value="30-34">30–34</option>
+</select>
+
+<br><br>
+
+<button onclick="calculate()">Show me the data</button>
+
+<p id="result"></p>
+
+<script src="script.js"></script>
+</body>
+</html>
