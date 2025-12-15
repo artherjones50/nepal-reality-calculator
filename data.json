@@ -9,7 +9,11 @@
     "bachelor_or_above": 18000,
     "never_married_bachelor": 9000,
     "married_bachelor": 7000,
-    "divorced_widowed_bachelor": 2000
+    "divorced_widowed_bachelor": 2000,
+    "employed": 50000,
+    "unemployed": 50000,
+    "employed_bachelor": 12000,
+    "unemployed_bachelor": 6000
   },
   {
     "gender": "Female",
@@ -21,6 +25,10 @@
     "bachelor_or_above": 12000,
     "never_married_bachelor": 6000,
     "married_bachelor": 5000,
-    "divorced_widowed_bachelor": 1000
+    "divorced_widowed_bachelor": 1000,
+    "employed": 45000,
+    "unemployed": 50000,
+    "employed_bachelor": 9000,
+    "unemployed_bachelor": 3000
   }
 ]
