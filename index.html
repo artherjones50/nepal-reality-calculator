@@ -1,54 +1,150 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Nepal Reality Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #e8f0fe;
+      color: #333;
+      text-align: center;
+    }
+
+    .card {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      background-color: #f9f9f9;
+    }
+
+    label {
+      font-weight: 500;
+    }
+
+    select, button {
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    #result.show {
+      opacity: 1;
+    }
+
+    option {
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
 
-<h2>How Common Are Your Preferences in Nepal?</h2>
-<p>This tool uses national statistics to estimate population percentages.</p>
+  <div class="card">
+    <h2>Nepal Reality Calculator 🇳🇵</h2>
 
-<label>Looking for:</label>
-<select id="gender">
-  <option value="Male">Man</option>
-  <option value="Female">Woman</option>
-</select>
+    <label>👤 Gender:</label>
+    <select id="gender">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
 
-<br><br>
+    <br><br>
+    <label>🎂 Age range:</label>
+    <select id="age">
+      <option value="20-24">20–24</option>
+      <option value="25-29">25–29</option>
+      <option value="30-34">30–34</option>
+    </select>
 
-<label>Age range:</label>
-<select id="age">
-  <option value="20-24">20–24</option>
-  <option value="25-29">25–29</option>
-  <option value="30-34">30–34</option>
-  <option value="35-39">35–39</option>
-</select>
+    <br><br>
+    <label>💍 Marital status:</label>
+    <select id="marital">
+      <option value="never_married">Never married</option>
+      <option value="married">Married</option>
+      <option value="divorced_widowed">Divorced/Widowed</option>
+    </select>
 
-<br><br>
+    <br><br>
+    <label>💼 Employment status:</label>
+    <select id="employment">
+      <option value="employed">Employed</option>
+      <option value="unemployed">Unemployed</option>
+    </select>
 
-<label>Marital status:</label>
-<select id="marital">
-  <option value="never_married">Never married</option>
-  <option value="married">Married</option>
-  <option value="divorced_widowed">Divorced/Widowed</option>
-</select>
-<br><br>
+    <br><br>
+    <button onclick="calculate()">Show me the data</button>
 
-<label>Employment status:</label>
-<select id="employment">
-  <option value="employed">Employed</option>
-  <option value="unemployed">Unemployed</option>
-</select>
+    <div id="result"></div>
+  </div>
 
+  <script>
+    async function calculate() {
+      const gender = document.getElementById("gender").value;
+      const age = document.getElementById("age").value;
+      const marital = document.getElementById("marital").value;
+      const employment = document.getElementById("employment").value;
 
-<br><br>
+      const response = await fetch("data.json");
+      const data = await response.json();
 
-<button onclick="calculate()">Show me the data</button>
+      const group = data.find(
+        item => item.gender === gender && item.age_group === age
+      );
 
-<p id="result"></p>
+      if (!group) {
+        const resultEl = document.getElementById("result");
+        resultEl.classList.remove("show");
+        resultEl.innerText = "Data not available.";
+        setTimeout(() => resultEl.classList.add("show"), 50);
+        return;
+      }
 
-<script src="script.js"></script>
+      const match = group.bachelor[marital][employment];
+
+      if (!match || match === 0) {
+        const resultEl = document.getElementById("result");
+        resultEl.classList.remove("show");
+        resultEl.innerText = "Data not available for this combination.";
+        setTimeout(() => resultEl.classList.add("show"), 50);
+        return;
+      }
+
+      const base = group.population;
+      const percentage = ((match / base) * 100).toFixed(1);
+      const oneIn = Math.round(base / match);
+
+      const resultEl = document.getElementById("result");
+      resultEl.classList.remove("show");
+      resultEl.innerHTML = `${percentage}% of ${gender.toLowerCase()}s aged ${age} who are ${marital.replace('_',' ')} and ${employment} 
+        have a bachelor’s degree or higher (${match} people out of ${base}). That’s about 1 in ${oneIn} people.`;
+      setTimeout(() => resultEl.classList.add("show"), 50);
+    }
+  </script>
+
 </body>
 </html>
