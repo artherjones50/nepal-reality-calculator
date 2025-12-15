@@ -1,3 +1,8 @@
+console.log("Gender:", gender);
+console.log("Age:", age);
+console.log("Marital:", marital);
+console.log("Employment:", employment);
+
 async function calculate() {
   const gender = document.getElementById("gender").value;
   const age = document.getElementById("age").value;
