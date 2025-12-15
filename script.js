@@ -19,6 +19,8 @@ async function calculate() {
 
   // exact key for marital + employment
   const key = `${marital}_${employment}_bachelor`;
+  console.log("Looking for key:", key);
+console.log("Group keys:", Object.keys(group));
   const match = group[key];
 
   if (!match || match === 0) {
