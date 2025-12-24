@@ -107,108 +107,117 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
   <!-- Embedded JSON Data -->
-  <script>
-  const data = [
-    // Male
-    {
-      "gender": "Male",
-      "age_group": "20-24",
-      "population": 1000,
-      "bachelor": {
-        "never_married": { "employed": 200, "unemployed": 50 },
-        "married": { "employed": 150, "unemployed": 30 },
-        "divorced_widowed": { "employed": 20, "unemployed": 10 }
-      }
-    },
-    {
-      "gender": "Male",
-      "age_group": "25-29",
-      "population": 1200,
-      "bachelor": {
-        "never_married": { "employed": 250, "unemployed": 40 },
-        "married": { "employed": 200, "unemployed": 50 },
-        "divorced_widowed": { "employed": 30, "unemployed": 10 }
-      }
-    },
-    {
-      "gender": "Male",
-      "age_group": "30-34",
-      "population": 1100,
-      "bachelor": {
-        "never_married": { "employed": 220, "unemployed": 40 },
-        "married": { "employed": 180, "unemployed": 30 },
-        "divorced_widowed": { "employed": 25, "unemployed": 10 }
-      }
-    },
-    // Female
-    {
-      "gender": "Female",
-      "age_group": "20-24",
-      "population": 950,
-      "bachelor": {
-        "never_married": { "employed": 180, "unemployed": 60 },
-        "married": { "employed": 100, "unemployed": 30 },
-        "divorced_widowed": { "employed": 15, "unemployed": 5 }
-      }
-    },
-    {
-      "gender": "Female",
-      "age_group": "25-29",
-      "population": 1000,
-      "bachelor": {
-        "never_married": { "employed": 200, "unemployed": 50 },
-        "married": { "employed": 160, "unemployed": 40 },
-        "divorced_widowed": { "employed": 20, "unemployed": 10 }
-      }
-    },
-    {
-      "gender": "Female",
-      "age_group": "30-34",
-      "population": 900,
-      "bachelor": {
-        "never_married": { "employed": 180, "unemployed": 40 },
-        "married": { "employed": 140, "unemployed": 30 },
-        "divorced_widowed": { "employed": 20, "unemployed": 10 }
-      }
+ <!-- Embedded JSON Data -->
+<script>
+const data = [
+  {
+    "gender": "Male",
+    "age_group": "20-24",
+    "population": 1000,
+    "bachelor": {
+      "never_married": { "employed": 200, "unemployed": 50 },
+      "married": { "employed": 150, "unemployed": 30 },
+      "divorced_widowed": { "employed": 20, "unemployed": 10 }
     }
-  ];
-
-  function calculate() {
-    const gender = document.getElementById("gender").value;
-    const age = document.getElementById("age").value;
-    const marital = document.getElementById("marital").value;
-    const employment = document.getElementById("employment").value;
-    const resultEl = document.getElementById("result");
-    resultEl.classList.remove("show");
-
-    const group = data.find(item => item.gender === gender && item.age_group === age);
-    if (!group) {
-      resultEl.innerHTML = "<span class='error'>Data not available for this age/gender combination.</span>";
-      setTimeout(() => resultEl.classList.add("show"), 50);
-      return;
+  },
+  {
+    "gender": "Male",
+    "age_group": "25-29",
+    "population": 1200,
+    "bachelor": {
+      "never_married": { "employed": 250, "unemployed": 40 },
+      "married": { "employed": 200, "unemployed": 50 },
+      "divorced_widowed": { "employed": 30, "unemployed": 10 }
     }
-
-    const match = group.bachelor[marital]?.[employment];
-    if (!match || match === 0) {
-      resultEl.innerHTML = "<span class='error'>Data not available for this combination.</span>";
-      setTimeout(() => resultEl.classList.add("show"), 50);
-      return;
+  },
+  {
+    "gender": "Male",
+    "age_group": "30-34",
+    "population": 1100,
+    "bachelor": {
+      "never_married": { "employed": 220, "unemployed": 40 },
+      "married": { "employed": 180, "unemployed": 30 },
+      "divorced_widowed": { "employed": 25, "unemployed": 10 }
     }
-
-    const base = group.population;
-    const percentage = ((match / base) * 100).toFixed(1);
-    const oneIn = Math.round(base / match);
-    let emoji = percentage > 50 ? "🎉" : percentage > 20 ? "🙂" : "😅";
-
-    resultEl.innerHTML = `${emoji} <span class="highlight">${percentage}%</span> of ${gender.toLowerCase()}s aged ${age} who are ${marital.replace('_',' ')} and ${employment} have a bachelor’s degree or higher (${match} people out of ${base}). That’s about 1 in ${oneIn} people.`;
-
-    setTimeout(() => resultEl.classList.add("show"), 50);
-
-    if (percentage > 50) {
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+  },
+  {
+    "gender": "Female",
+    "age_group": "20-24",
+    "population": 950,
+    "bachelor": {
+      "never_married": { "employed": 180, "unemployed": 60 },
+      "married": { "employed": 100, "unemployed": 30 },
+      "divorced_widowed": { "employed": 15, "unemployed": 5 }
+    }
+  },
+  {
+    "gender": "Female",
+    "age_group": "25-29",
+    "population": 1000,
+    "bachelor": {
+      "never_married": { "employed": 200, "unemployed": 50 },
+      "married": { "employed": 160, "unemployed": 40 },
+      "divorced_widowed": { "employed": 20, "unemployed": 10 }
+    }
+  },
+  {
+    "gender": "Female",
+    "age_group": "30-34",
+    "population": 900,
+    "bachelor": {
+      "never_married": { "employed": 180, "unemployed": 40 },
+      "married": { "employed": 140, "unemployed": 30 },
+      "divorced_widowed": { "employed": 20, "unemployed": 10 }
     }
   }
-  </script>
+];
+</script>
+
+<!-- Calculator Logic -->
+<script>
+function calculate() {
+  // 🎉 CONFETTI ALWAYS RUNS
+  confetti({
+    particleCount: 120,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+
+  const gender = document.getElementById("gender").value;
+  const age = document.getElementById("age").value;
+  const marital = document.getElementById("marital").value;
+  const employment = document.getElementById("employment").value;
+
+  const resultDiv = document.getElementById("result");
+  resultDiv.classList.remove("show");
+
+  const match = data.find(d =>
+    d.gender === gender &&
+    d.age_group === age
+  );
+
+  if (!match) {
+    resultDiv.innerHTML =
+      `<span class="error">No data available for this combination.</span>`;
+    resultDiv.classList.add("show");
+    return;
+  }
+
+  const count = match.bachelor?.[marital]?.[employment];
+
+  if (count === undefined) {
+    resultDiv.innerHTML =
+      `<span class="error">No data available for this combination.</span>`;
+  } else {
+    resultDiv.innerHTML = `
+      Out of <span class="highlight">${match.population}</span> people,<br>
+      <span class="highlight">${count}</span> match your criteria.
+    `;
+  }
+
+  resultDiv.classList.add("show");
+}
+</script>
 
 </body>
 </html>
